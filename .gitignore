@@ -2,3 +2,4 @@
 .vscode
 *.o
 pet_testing
+.nfs*

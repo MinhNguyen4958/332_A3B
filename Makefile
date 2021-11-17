@@ -3,7 +3,7 @@ CFLAGS = -Wall -g
 
 .PHONY: clean
 pet_testing: pet_testing.o petgroomsynch.o
-	${C} ${CLFAGS} -o pet_testing pet_testing.o petgroomsynch.o
+	${C} ${CLFAGS} -o pet_testing pet_testing.o petgroomsynch.o -lpthread
 
 pet_testing.o: pet_testing.c petgroomsynch.h
 
