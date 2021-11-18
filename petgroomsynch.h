@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 // declare
-typedef enum {none = 0, cat = 1, dog = 2, other = 3} pet_t;
+typedef enum {cat = 1, dog = 2, other = 3} pet_t;
 
 // initialize needed variables
 int petgroom_init(int numstations);
