@@ -15,9 +15,6 @@ int available_stations;
 pthread_mutex_t stationLock;
 pthread_cond_t condStation;
 
-// any array of pets that are currently in a grooming station
-pet_t* petLogs;
-
 // the amount of wait for dogs/cats
 int DogsWaiting;
 int CatsWaiting;
@@ -40,8 +37,6 @@ int petgroom_init(int numstations) {
      if (pthread_cond_init(&condStation, NULL) != 0) {
         return -1;
      }
-    
-    petLogs = (pet_t*) malloc(numstations * sizeof(pet_t));
     
     numCats = 0;
     numDogs = 0;
@@ -104,13 +99,6 @@ int newpet(pet_t pet) {
         DogsWaiting = 0;
     }
 
-    int counter = 0;
-    // search through the logs for an available station
-    while (petLogs[counter] != 0) { 
-        counter++;
-    }
-    petLogs[counter] = pet;
-
     // decrement the sema by 1
     available_stations -= 1;
 
@@ -136,13 +124,6 @@ int petdone(pet_t pet) {
     if (pthread_mutex_lock(&stationLock) != 0) {
         return -1;
     }
-
-    int counter = 0;
-    while (petLogs[counter] != pet) {
-        counter++;
-    }
-    // pet is found, remove the pet from log
-    petLogs[counter] = 0;
 
     // increase sema by 1
     available_stations++;
@@ -192,7 +173,6 @@ int petgroom_done() {
     if (pthread_cond_destroy(&condStation) != 0) {
         return -1;
     }
-    free(petLogs);
 
     numCats = 0;
     numDogs = 0;
@@ -207,7 +187,7 @@ int petgroom_done() {
 
 void* grooming(void* aPet) {
     pet_t pet = *(pet_t*) aPet;
-    int arrivalTime = (rand() % 10) + 1; // arrival time between 1 to 10
+    int arrivalTime = (rand() % 10) + 1; // arrival time between 1 to 10 seconds
     
     char* pet_type;
     
